@@ -7,35 +7,35 @@
                     <h3>Edit</h3>
                     <div class="mb-3">
                         <label for="title" class="form-label">Title:</label>
-                        <input class="form-control" name="title" value="<%= list.title %>" type="text" required>
+                        <input class="form-control" name="listing[title]" value="<%= list.title %>" type="text" required>
                         <div class="invalid-feedback">Please Enter a title</div>
                     </div>
                     <div class="mb-3">
                         <label for="title" class="form-label">Description:</label>
-                        <textarea class="form-control" name="description"required><%= list.description %>" ></textarea>
+                        <textarea class="form-control" name="listing[description]"required><%= list.description %></textarea>
                         <div class="invalid-feedback">Please Enter a short description</div>
                     </div>
                     <div class="mb-3">
                         <label for="title" class="form-label">Image:</label>
-                        <input class="form-control" name="image" value="<%= list.image %>" type="text"required>
+                        <input class="form-control" name="listing[image]" value="<%= list.image %>" type="text"required>
                         <div class="invalid-feedback">Please Enter the Image URL</div>
                     </div>
                     <div>
                         
                         <div class="mb-3 col-4">
                             <label for="title" class="form-label">Price:</label>
-                            <input class="form-control" name="price" value="<%= list.price %>" type="number"required>
+                            <input class="form-control" name="listing[price]" value="<%= list.price %>" type="number"required>
                             <div class="invalid-feedback">Please Enter the price</div>
                         </div>
                         <div class="mb-3 col-8">
                             <label for="title" class="form-label">Location:</label>
-                            <input class="form-control" name="location" value="<%= list.location %>" type="text"required>
+                            <input class="form-control" name="listing[location]" value="<%= list.location %>" type="text"required>
                             <div class="invalid-feedback">Please Enter the location</div>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="title" class="form-label">Country:</label>
-                        <input class="form-control" name="country" value="<%= list.country %>" type="text"required>
+                        <input class="form-control" name="listing[country]" value="<%= list.country %>" type="text"required>
                         <div class="invalid-feedback">Please Enter a country</div>
                     </div>
                     <button class="btn btn-dark mt-3">Edit</button>
