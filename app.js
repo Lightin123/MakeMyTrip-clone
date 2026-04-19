@@ -36,10 +36,10 @@ app.get("/", (req, res) => {
 });
 
 //listings
-app.use("/listings",listings);
+app.use("/listings", listings);
 
 //reviews
-app.use("/listings/:id",reviews)
+app.use("/listings/:id", reviews)
 
 //Error Handling
 app.use((req, res, next) => {
