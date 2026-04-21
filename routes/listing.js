@@ -29,6 +29,7 @@ route.post("/", validateListing, wrapAsync(async (req, res) => {
         throw new ExpressError(400, "No Listing was found");
     }
     await list.save();
+    req.flash("success","New listing was created");
     res.redirect("/listings");
 }));
 
@@ -36,6 +37,10 @@ route.post("/", validateListing, wrapAsync(async (req, res) => {
 route.get("/:id/edit", wrapAsync(async (req, res) => {
     let { id } = req.params
     let list = await Listing.findById(id);
+    if(!list){
+        req.flash("error","Listing you requested for does not exist");
+        res.redirect("/listings");
+    }
     res.render("listings/edit.ejs", { list });
 }));
 
@@ -48,12 +53,17 @@ route.put("/:id", wrapAsync(async (req, res) => {
 route.get("/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
     let list = await Listing.findById(id).populate("reviews");
+    if(!list){
+        req.flash("error","Listing you requested for does not exist");
+        return res.redirect("/listings");
+    }
     res.render("listings/show.ejs", { list });
 }));
 route.delete("/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
     await Listing.findByIdAndDelete(id);
-    res.redirect(`/listings`);
+    req.flash("success","Listing deleted!");
+    return res.redirect(`/listings`);
 }));
 
 module.exports = route;
