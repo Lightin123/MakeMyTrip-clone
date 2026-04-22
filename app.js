@@ -15,7 +15,6 @@ const passport = require('passport');
 const LocalStratergy = require('passport-local');
 const User = require('./models/user.js');
 
-
 const sessionOptions = {
     secret: "secretcode",
     resave: false,
@@ -56,6 +55,7 @@ async function main() {
 app.use((req,res,next)=>{
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
+    res.locals.currUser = req.user;
     next()
 });
 

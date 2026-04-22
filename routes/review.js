@@ -29,7 +29,7 @@ router.delete("/reviews/:reviewId",wrapAsync(async(req,res)=>{
     let {id ,reviewId} = req.params;
     await Listing.findByIdAndUpdate(id,{$pull :{reviews : reviewId}});
     await Review.findByIdAndDelete(reviewId);
-    req.flash("success","Reviwew deelted");
+    req.flash("success","Review deelted");
     res.redirect(`/listings/${req.params.id}`);
 }))
 module.exports=router
