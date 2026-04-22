@@ -10,6 +10,10 @@ const listings = require("./routes/listing.js");
 const reviews = require("./routes/review.js");
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport');
+const LocalStratergy = require('passport-local');
+const User = require('./models/user.js');
+
 
 const sessionOptions = {
     secret: "secretcode",
@@ -31,6 +35,11 @@ app.use(methodOverride('_method'));
 app.engine("ejs", ejsMate);
 app.use(session(sessionOptions));
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStratergy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 main().then((res) => {
     console.log("Connected Succesfully");
@@ -54,6 +63,14 @@ app.get("/", (req, res) => {
     console.log("Index route");
 });
 
+app.get("/demouser",async(req,res)=>{
+    let fakeUSer = new User({
+        email : "student@gmail.com",
+        username : "test-student",
+    })
+    let registeredUSer = await User.register(fakeUSer,"password");
+    res.send(registeredUSer);
+})
 
 //listings
 app.use("/listings", listings);
