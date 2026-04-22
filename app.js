@@ -6,8 +6,9 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const PORT = 8080;
 const ExpressError = require('./utils/ExpressError.js');
-const listings = require("./routes/listing.js");
-const reviews = require("./routes/review.js");
+const listingRouter = require("./routes/listing.js");
+const reviewRouter = require("./routes/review.js");
+const userRouter = require('./routes/user.js');
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
@@ -63,20 +64,22 @@ app.get("/", (req, res) => {
     console.log("Index route");
 });
 
-app.get("/demouser",async(req,res)=>{
-    let fakeUSer = new User({
-        email : "student@gmail.com",
-        username : "test-student",
-    })
-    let registeredUSer = await User.register(fakeUSer,"password");
-    res.send(registeredUSer);
-})
+// app.get("/demouser",async(req,res)=>{
+//     let fakeUSer = new User({
+//         email : "student@gmail.com",
+//         username : "test-student",
+//     })
+//     let registeredUSer = await User.register(fakeUSer,"password");
+//     res.send(registeredUSer);
+// })
+
+app.use("/",userRouter);
 
 //listings
-app.use("/listings", listings);
+app.use("/listings", listingRouter);
 
 //reviews
-app.use("/listings/:id", reviews)
+app.use("/listings/:id", reviewRouter)
 
 //Error Handling
 app.use((req, res, next) => {
