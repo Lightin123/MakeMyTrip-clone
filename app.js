@@ -1,3 +1,7 @@
+if(process.env.NODE_ENV != "production"){
+    require("dotenv").config()
+}
+
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -49,7 +53,7 @@ main().then((res) => {
 
 //Database Creation
 async function main() {
-    await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust")
+    await mongoose.connect(process.env.MONGODB_CONNECTION)
 }
 
 app.use((req,res,next)=>{
