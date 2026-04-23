@@ -16,7 +16,7 @@ route.post("/", isLoggedIn, validateListing,upload.single('listing[image]'), wra
 //Update routes
 route.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.renderEditListing));
 
-route.put("/:id", isLoggedIn, isOwner, validateListing, wrapAsync(listingController.updateListing));
+route.put("/:id", isLoggedIn, isOwner,upload.single('listing[image]'), validateListing,wrapAsync(listingController.updateListing));
 
 //show route 
 route.get("/:id", wrapAsync(listingController.showListing));

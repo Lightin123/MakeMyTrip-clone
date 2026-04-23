@@ -18,7 +18,7 @@ module.exports.createNewListing = async (req, res) => {
     if (!list) {
         throw new ExpressError(400, "No Listing was found");
     }
-    list.image = {url,filename};
+    list.image = { url, filename };
     await list.save();
     req.flash("success", "New listing was created");
     res.redirect("/listings");
@@ -35,7 +35,14 @@ module.exports.renderEditListing = async (req, res) => {
 };
 
 module.exports.updateListing = async (req, res) => {
+    if (typeof req.file !== "undefined") {
+        req.body.listing.image = {
+            url: req.file.path,
+            filename: req.file.filename
+        };
+    }
     await Listing.findByIdAndUpdate(req.params.id, req.body.listing);
+    req.flash("success", "Listing Updated!");
     res.redirect(`/listings/${req.params.id}`);
 };
 

@@ -1,6 +1,77 @@
 <% layout('/layouts/boilerplate') %>
+<style>
+    .filters{
+        display : flex;
+        gap : 2rem;
+    }
+    .filter{
+        opacity: 0.7;
+        text-align : center;
+        margin-top : 1.5rem;
+    }
+    .filter:hover{
+        opacity: 1;
+        cursor: pointer;
+    }
+    .filter p{
+        font-size : 0.8rem;
+    }
+    .tax-info{
+        display:none;
+    }
+    .price{
+        display: inline;
+    }
+</style>
     <body>
-        <h1>All Listings</h1>
+        <div class="filters">
+            <div class="filter">
+                <div><i class="fa-solid fa-fire"></i></div>
+                <p>Trending</p>
+            </div>
+            <div class="filter">
+                <div><i class="fa-solid fa-bed"></i></div>
+                <p>Rooms</p>
+            </div>
+            <div class="filter">
+                <div><i class="fa-solid fa-mountain-city"></i></div>
+                <p>Iconic Cities</p>
+            </div>
+            <div class="filter">
+                <div><i class="fa-solid fa-mountain"></i></div>
+                <p>Mountains</p>
+            </div>
+            <div class="filter">
+                <div><i class="fa-brands fa-fort-awesome"></i></div>
+                <p>Castles</p>
+            </div>
+            <div class="filter">
+                <div><i class="fa-solid fa-person-swimming"></i></div>
+                <p>Amazing Pools</p>
+            </div>
+            <div class="filter">
+                <div><i class="fa-solid fa-campground"></i></div>
+                <p>Camping</p>
+            </div>
+            <div class="filter">
+                <div><i class="fa-solid fa-tractor"></i></div>
+                <p>Farms</p>
+            </div>
+            <div class="filter">
+                <div><i class="fa-regular fa-snowflake"></i></div>
+                <p>Arctic</p>
+            </div>
+            <div class="filter">
+                <div><i class="fa-solid fa-umbrella-beach"></i></div>
+                <p>Beach</p>
+            </div>
+            <div class="toggle-switch d-flex align-items-center ms-auto" style="z-index: 10;">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="taxSwitch" style="cursor: pointer;">
+                    <label class="form-check-label" for="taxSwitch" style="cursor: pointer; user-select: none;">Display total after taxes</label>
+                </div>
+            </div>
+        </div>
         <div class="row row-cols-lg-3">
             <% for(list of listings){ %>
                 <a style="text-decoration: none;" href="/listings/<%= list._id %>">
@@ -13,7 +84,12 @@
                                     <%= list.title %>
                                 </b>
                                 <br>
-                                ₹<%= list.price %> / night
+                                <span class="price">
+                                    ₹<%= list.price %> / night 
+                                </span>
+                                <span class="tax-info">
+                                    ₹<%= list.price*0.18 + list.price %> / night
+                                </span>
                             </p>
                         </div>
                     </div>
@@ -21,3 +97,29 @@
                 <% } %>
         </div>
     </body>
+    <script>
+        let element = document.getElementById("taxSwitch")
+        element.addEventListener("click",()=>{
+            let toggle = document.getElementsByClassName("tax-info")
+            let prices = document.getElementsByClassName("price")
+            for(list of toggle){
+                if(list.style.display !== "inline"){
+                list.style.display = "inline";
+
+            }
+            else{
+                list.style.display = "none";
+            }
+        }
+            for(price of prices){
+                if(price.style.display !== "none"){
+                price.style.display = "none";
+
+            }
+            else{
+                price.style.display = "inline";
+            }
+        }
+
+        })
+    </script>
