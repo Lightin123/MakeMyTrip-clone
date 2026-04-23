@@ -11,11 +11,14 @@ module.exports.renderNewListing = (req, res) => {
 }
 
 module.exports.createNewListing = async (req, res) => {
+    let url = req.file.path;
+    let filename = req.file.filename;
     let list = new Listing(req.body.listing);
     list.owner = req.user._id;
     if (!list) {
         throw new ExpressError(400, "No Listing was found");
     }
+    list.image = {url,filename};
     await list.save();
     req.flash("success", "New listing was created");
     res.redirect("/listings");
