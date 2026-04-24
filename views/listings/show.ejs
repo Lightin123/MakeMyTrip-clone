@@ -1,6 +1,13 @@
 <% layout('/layouts/boilerplate') %>
-
+<style>
+    .custom-pin {
+        font-size: 40px; /* Adjust this to make it as big as you want */
+        cursor: pointer;
+        filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3));
+    }
+</style>
     <body>
+        <%= list.gemoetry %>
         <div class="row">
             <div class="col-8 offset-2 mt-4 mb-3">
                 <h3>Listing Details:</h3>
@@ -87,6 +94,25 @@
                     <% } %>
                 </div>
             </div>
+            <div>
+                <h3>Location:</h3>
+                  <gmp-map
+                    center="<%= lat%>,<%= lon %>"
+                    zoom="9"
+                    map-id="DEMO_MAP_ID"
+                    style="height: 400px; width: 100%; display: block;"
+                    >
+                    <gmp-advanced-marker
+                    position="<%= lat%>,<%= lon %>"
+                    title="Your Listing Location">
+                    <div class="custom-pin">
+        📍
+    </div></gmp-advanced-marker>
+                </gmp-map>
+            </div>
         </div>
         </div>
     </body>
+<script 
+  src="https://maps.googleapis.com/maps/api/js?key=<%= GOOGLE_MAPS_API_KEY %>&libraries=maps,marker&v=beta">
+</script>

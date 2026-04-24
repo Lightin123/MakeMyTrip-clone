@@ -26,8 +26,20 @@ const listingSchema = new Schema({
     owner : {
         type : Schema.Types.ObjectId,
         ref : "User"
+    },
+    geometry: {
+        type: {
+            type: String, // Don't do 'location: String' here
+            enum: ['Point'], // 'location.type' must be 'Point'
+            required: true
+        },
+        coordinates: {
+            type: [Number], // Array of numbers: [longitude, latitude]
+            required: true
+        }
     }
 });
+listingSchema.index({ geometry: "2dsphere" });
 listingSchema.post("findOneAndDelete", async (listings) => {
     if (listings) {
         await Review.deleteMany({ _id: { $in: listings.reviews } })
