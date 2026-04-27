@@ -12,8 +12,8 @@ module.exports.renderNewListing = (req, res) => {
 }
 
 module.exports.createNewListing = async (req, res) => {
-    let url = req.file.path;
-    let filename = req.file.filename;
+    let url = req.file?.path || "https://res.cloudinary.com/dxysjibir/image/upload/v1700000000/Airbnb/default_image.jpg";
+    let filename = req.file?.filename || "default";
     let list = new Listing(req.body.listing);
     list.owner = req.user._id;
     if (!list) {

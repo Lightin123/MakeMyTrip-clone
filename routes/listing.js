@@ -11,7 +11,7 @@ route.get("/", wrapAsync(listingController.index));
 //Create route
 route.get("/new", isLoggedIn, listingController.renderNewListing)
 
-route.post("/", isLoggedIn, validateListing,upload.single('listing[image]'), wrapAsync(listingController.createNewListing));
+route.post("/", isLoggedIn, upload.single('listing[image]'), validateListing, wrapAsync(listingController.createNewListing));
 
 //Update routes
 route.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.renderEditListing));

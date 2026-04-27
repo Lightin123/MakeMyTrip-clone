@@ -41,6 +41,11 @@ module.exports.validateListing = (req, res, next) => {
 }
 
 module.exports.validateReview = (req, res, next) => {
+    let { id } = req.params;
+    if(!req.body.review || req.body.review.rating == '0'){
+        req.flash("error","You must give a rating");
+        return res.redirect(`/listings/${id}`);
+    }
     const { error } = reviewSchema.validate(req.body)
     if (error) {
         throw new ExpressError(400, error);
