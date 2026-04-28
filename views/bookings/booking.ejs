@@ -1,0 +1,81 @@
+<% layout('/layouts/boilerplate') %>
+
+<div class="row justify-content-center">
+  <div class="col-md-6 mt-5">
+
+    <div class="card shadow rounded-4 p-4">
+
+      <h3 class="text-center mb-4"><i class="fa-solid fa-house"></i> Booking Details</h3>
+
+      <form method="POST" action="/booking/<%= id %>/pay">
+
+        <!-- Rooms -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Number of Rooms</label>
+          <input 
+            class="form-control" 
+            name="booking[rooms]" 
+            type="number" 
+            min="1" 
+            placeholder="Enter rooms" 
+            required>
+        </div>
+
+        <!-- Date Range -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Select Dates</label>
+          <input 
+            type="text" 
+            id="dateRange" 
+            class="form-control" 
+            placeholder="Choose your stay dates"
+            name="booking[date]" 
+            required>
+        </div>
+
+        <!-- Hidden fields -->
+        <input type="hidden" name="booking[startDate]" id="startDate">
+        <input type="hidden" name="booking[endDate]" id="endDate">
+
+        <!-- Guests -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Number of Guests</label>
+          <input 
+            class="form-control" 
+            name="booking[guests]" 
+            type="number" 
+            min="1" 
+            placeholder="Enter guests"
+            required>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn btn-success w-100 mt-3">
+          Proceed to Payment
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- Flatpickr Script -->
+<script>
+flatpickr("#dateRange", {
+  mode: "range",
+  dateFormat: "Y-m-d",
+  minDate: "today",
+  showMonths: 2,
+
+  onChange: function (selectedDates) {
+    if (selectedDates.length === 2) {
+      const format = (date) => date.toISOString().split("T")[0];
+
+      document.getElementById("startDate").value = format(selectedDates[0]);
+      document.getElementById("endDate").value = format(selectedDates[1]);
+    }
+  }
+});
+</script>

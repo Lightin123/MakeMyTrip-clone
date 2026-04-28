@@ -3,6 +3,7 @@ const Review = require("./models/review");
 const ExpressError = require('./utils/ExpressError.js');
 const { listingSchema} = require('./schema.js');
 const {reviewSchema } = require('./schema.js');
+const { bookingSchema } = require('./schema.js');
 
 module.exports.isLoggedIn = (req,res,next)=>{
     req.session.redirectUrl = req.originalUrl;
@@ -43,10 +44,19 @@ module.exports.validateListing = (req, res, next) => {
 module.exports.validateReview = (req, res, next) => {
     let { id } = req.params;
     if(!req.body.review || req.body.review.rating == '0'){
+        console.log('invalid')
         req.flash("error","You must give a rating");
         return res.redirect(`/listings/${id}`);
     }
     const { error } = reviewSchema.validate(req.body)
+    if (error) {
+        throw new ExpressError(400, error);
+    }
+    next();
+}
+
+module.exports.validateBooking = (req, res, next) => {
+    let { error } = bookingSchema.validate(req.body);
     if (error) {
         throw new ExpressError(400, error);
     }

@@ -13,6 +13,7 @@ const ExpressError = require('./utils/ExpressError.js');
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require('./routes/user.js');
+const bookingRouter = require('./routes/booking.js');
 const session = require('express-session');
 const MongoStore = require('connect-mongo').default;
 const flash = require('connect-flash');
@@ -76,6 +77,7 @@ app.use((req,res,next)=>{
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     res.locals.currUser = req.user;
+
     next()
 });
 
@@ -95,6 +97,10 @@ app.use("/listings", listingRouter);
 
 //reviews
 app.use("/listings/:id", reviewRouter)
+
+//booking
+
+app.use("/booking",bookingRouter)
 
 //Error Handling
 app.use((req, res, next) => {
