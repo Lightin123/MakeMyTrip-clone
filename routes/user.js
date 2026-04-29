@@ -23,12 +23,4 @@ route.post("/login", redirectUrl, passport.authenticate('local', { failureRedire
 
 route.get("/logout", userController.logout)
 
-route.delete("/:id",async(req,res)=>{
-    let {id} = req.params;
-    await Review.findByIdAndDelete(id);
-    req.flash("success", "User deleted!");
-    return res.redirect(`/listings`);
-
-})
-
 module.exports = route;

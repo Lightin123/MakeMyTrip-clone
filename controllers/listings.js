@@ -33,7 +33,7 @@ module.exports.createNewListing = async (req, res) => {
         coordinates: [parseFloat(lon), parseFloat(lat)]
     };
     }
-    list.totalRooms = req.body.listing.rooms
+    list.totalRooms = req.body.listing.totalRooms
     list.image = { url, filename };
     await list.save();
     req.flash("success", "New listing was created");
