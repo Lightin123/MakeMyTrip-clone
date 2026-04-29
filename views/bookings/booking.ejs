@@ -97,8 +97,7 @@ function getUnavailableDates(requestedRooms) {
 let fp;
 
 function initPicker(disabledDates) {
-  if (fp) fp.destroy();
-
+  console.log("working");
   fp = flatpickr("#dateRange", {
     mode: "range",
     minDate: "today",

@@ -1,0 +1,69 @@
+<% layout('/layouts/boilerplate') %>
+
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">My Bookings</h2>
+
+  <% if (bookingHistory.length === 0) { %>
+    <div class="text-center mt-5">
+      <h5>No bookings yet </h5>
+      <a href="/listings" class="btn btn-primary mt-3">Explore Listings</a>
+    </div>
+  <% } %>
+
+  <div class="row">
+    <% bookingHistory.forEach(booking => { %>
+
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card shadow-sm h-100 rounded-4">
+
+          <!-- Image -->
+          <img 
+            src="<%= booking.listing.image.url %>" 
+            class="card-img-top rounded-top-4" 
+            style="height: 200px; object-fit: cover;"
+          >
+
+          <!-- Body -->
+          <div class="card-body">
+
+            <h5 class="card-title">
+              <%= booking.listing.title %>
+            </h5>
+
+            <p class="mb-1">
+              <strong>From:</strong> 
+              <%= booking.startDate.toISOString().split("T")[0] %>
+            </p>
+
+            <p class="mb-1">
+              <strong>To:</strong> 
+              <%= booking.endDate.toISOString().split("T")[0] %>
+            </p>
+
+            <p class="mb-1">
+              <strong>Rooms:</strong> <%= booking.rooms %>
+            </p>
+
+            <p class="mb-2">
+              <strong>Guests:</strong> <%= booking.guests %>
+            </p>
+
+            <p class="fw-bold text-success">
+              ₹ <%= booking.rooms * booking.listing.price*1.18 %> / night
+            </p>
+
+          </div>
+
+          <!-- Footer -->
+          <div class="card-footer bg-white border-0 text-end">
+            <a href="/listings/<%= booking.listing._id %>" class="btn btn-outline-primary btn-sm">
+              View Listing
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+    <% }) %>
+  </div>
+</div>

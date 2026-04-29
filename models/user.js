@@ -9,4 +9,11 @@ const userSchema = new Schema({
     },
 });
 userSchema.plugin(passportLocalMongoose);
+userSchema.post("findOneAndDelete", async (user) => {
+    if (user) {
+        await Review.deleteMany({ _id: { $in: listings.reviews } })
+    }
+});
+
+
 module.exports = mongoose.model('User', userSchema);

@@ -9,6 +9,10 @@ const { isLoggedIn, isOwner, validateListing, validateBooking } = require("../mi
 route.get('/:id', isLoggedIn, async (req, res) => {
     let { id } = req.params;
     let listing = await Listing.findById(id)
+    if(!listing){
+        req.flash("error","Listing does not exist");
+        return res.redirect('/listings');
+    }
     let bookings = await Booking.find({ listing: id });
     res.render("bookings/booking.ejs", { id, bookings, totalRooms: listing.totalRooms })
 })
@@ -82,7 +86,7 @@ route.get("/:id/pay", isLoggedIn, async (req, res) => {
     res.render("bookings/bill", { id, listPrice, bookingData, totalPrice, days, razorpayKey: process.env.RAZORPAY_KEY_ID });
 })
 
-route.post("/:id/create-order", async (req, res) => {
+route.post("/:id/create-order",isLoggedIn, async (req, res) => {
     let { id } = req.params;
 
     // get booking data from session
