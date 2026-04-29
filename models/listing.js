@@ -9,12 +9,12 @@ const listingSchema = new Schema({
     },
     description: String,
     image: {
-       url:{
-        type:String
-       },
-       filename:{
-        type:String
-       }
+        url: {
+            type: String
+        },
+        filename: {
+            type: String
+        }
     },
     price: Number,
     location: String,
@@ -23,9 +23,9 @@ const listingSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Review"
     }],
-    owner : {
-        type : Schema.Types.ObjectId,
-        ref : "User"
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
     },
     geometry: {
         type: {
@@ -37,6 +37,11 @@ const listingSchema = new Schema({
             type: [Number], // Array of numbers: [longitude, latitude]
             required: true
         }
+    },
+    totalRooms: {
+        type: Number,
+        required: true,
+        min: 1
     }
 });
 listingSchema.index({ geometry: "2dsphere" });

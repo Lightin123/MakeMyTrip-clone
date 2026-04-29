@@ -61,21 +61,81 @@
   </div>
 </div>
 
-<!-- Flatpickr Script -->
 <script>
-flatpickr("#dateRange", {
-  mode: "range",
-  dateFormat: "Y-m-d",
-  minDate: "today",
-  showMonths: 2,
+  const bookings = JSON.parse('<%- JSON.stringify(bookings || []) %>');
+  const totalRooms = <%= totalRooms %>;
+  const roomsInput = document.querySelector("[name='booking[rooms]']");
+ function isAvailable(date, requestedRooms) {
+  let roomsUsed = 0;
 
-  onChange: function (selectedDates) {
+  bookings.forEach(b => {
+    const start = new Date(b.startDate);
+    const end = new Date(b.endDate);
+
+    if (start <= date && date < end) {
+      roomsUsed += b.rooms;
+    }
+  });
+
+  return roomsUsed + requestedRooms <= totalRooms;
+}
+function getUnavailableDates(requestedRooms) {
+  const result = [];
+  const todayStr = new Date().toISOString().split('T')[0];
+  const baseDate = new Date(todayStr); // Forces UTC Midnight
+
+  for (let i = 0; i < 90; i++) { // Check up to 90 days ahead
+    const d = new Date(baseDate.getTime() + i * 24 * 60 * 60 * 1000);
+
+    if (!isAvailable(d, requestedRooms)) {
+      result.push(d.toISOString().split("T")[0]);
+    }
+  }
+
+  return result;
+}
+let fp;
+
+function initPicker(disabledDates) {
+  if (fp) fp.destroy();
+
+  fp = flatpickr("#dateRange", {
+    mode: "range",
+    minDate: "today",
+    showMonths: 2,
+    disable: disabledDates,
+    onChange: function (selectedDates) {
     if (selectedDates.length === 2) {
-      const format = (date) => date.toISOString().split("T")[0];
+      if (selectedDates[0].getTime() === selectedDates[1].getTime()) {
+          fp.clear();
+          alert("Minimum stay is 1 night. Please select a valid range.");
+          return;
+      }
+      const format = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      };
 
       document.getElementById("startDate").value = format(selectedDates[0]);
       document.getElementById("endDate").value = format(selectedDates[1]);
     }
   }
+  });
+}
+roomsInput.addEventListener("change", () => {
+  const rooms = parseInt(roomsInput.value);
+  if (isNaN(rooms) || rooms < 1) {
+    alert("Please enter a valid number of rooms.");
+    roomsInput.value = "";
+    return;
+  }
+
+  const disabled = getUnavailableDates(rooms);
+
+  initPicker(disabled);
 });
+initPicker(getUnavailableDates(1));
+
 </script>

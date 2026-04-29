@@ -15,6 +15,10 @@
                         <div class="invalid-feedback">Please Enter a short description</div>
                     </div>
                     <div class="mb-3">
+                        <label for="totalRooms" class="form-label">Number of Rooms:</label>
+                        <input class="form-control" name="listing[totalRooms]" value="<%= list.totalRooms %>" type="number" required>
+                    </div>
+                    <div class="mb-3">
                         <img src="<%= list.image.url %>" class="card-img-top show-img" alt="...">
                         <label for="title" class="form-label">Image:</label>
                         <input class="form-control" name="listing[image]"type="file">
