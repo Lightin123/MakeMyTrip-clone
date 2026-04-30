@@ -46,35 +46,41 @@
 </div>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-    document.getElementById("payBtn").onclick = async function (e) {
+  document.getElementById("payBtn").addEventListener("click", async function (e) {
       e.preventDefault();
 
-  const res = await fetch("/booking/<%= id %>/create-order", {
-    method: "POST"
-  });
-
-  const order = await res.json();
-
-  const options = {
-    key: "<%= razorpayKey %>",
-    amount: order.amount,
-    currency: "INR",
-    name: "MakeMyTrip Clone",
-    description: "Booking Payment",
-    order_id: order.id,
-
-    handler: async function (response) {
-      await fetch("/booking/<%= id %>/verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(response)
+      const res = await fetch("/booking/<%= id %>/create-order", {
+        method: "POST"
       });
 
-      window.location.href = "/booking/<%= id %>/success";
-    }
-  };
+      const order = await res.json();
 
-  const rzp = new Razorpay(options);
-  rzp.open();
-};
+      const options = {
+        key: "<%= razorpayKey %>",
+        amount: order.amount,
+        currency: "INR",
+        name: "MakeMyTrip Clone",
+        description: "Booking Payment",
+        order_id: order.id,
+
+        handler: async function (response) {
+          let res = await fetch("/booking/<%= id %>/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(response),
+            credentials: "same-origin"  
+          });
+          const data = await res.json();
+          if (data.success){
+            window.location.href = "/booking/<%= id %>/success";
+          }
+          else{
+            window.location.href = "/booking/<%= id %>/failure";
+          }
+        }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
+});
 </script>

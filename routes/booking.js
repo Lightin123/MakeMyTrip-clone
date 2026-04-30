@@ -134,24 +134,36 @@ route.post("/:id/verify", isLoggedIn, async (req, res) => {
 
         req.session.bookingData = null;
         req.session.paymentSuccess = true;
+        req.session.paymentFailure = false;
 
         res.json({ success: true });
     } else {
+        req.session.paymentSuccess = false;
+        req.session.paymentFailure = true;
         res.status(400).json({ success: false });
     }
 });
 
-route.get("/:id/success",isLoggedIn, async (req, res) => {
-    if(req.session.paymentSuccess === true){
-        let { id } = req.params;
-        let listing = await Listing.findById(id);
-        req.session.paymentSuccess = false;
-        res.render("bookings/success.ejs", { listing });
+route.get("/:id/success", isLoggedIn, async (req, res) => {
+    if (!req.session.paymentSuccess) {
+        return res.redirect(`/booking/${req.params.id}`);
     }
-    else{
-        req.flash("error","Invalid request");
-        res.redirect('/listings');
+    let listing = await Listing.findById(req.params.id);
+    delete req.session.paymentSuccess;
+    delete req.session.paymentFailure;
+    res.render("bookings/success", { listing });
+});
+
+route.get("/:id/failure", (req, res) => {
+    if (!req.session.paymentFailure) {
+        return res.redirect(`/booking/${req.params.id}`);
     }
+    delete req.session.paymentFailure;
+    delete req.session.paymentSuccess;
+    res.render("bookings/failure", {
+        id: req.params.id,
+        errorMessage: "Payment verification failed"
+    });
 });
 
 module.exports = route;
