@@ -49,8 +49,16 @@
             </p>
 
             <p class="fw-bold text-success">
-              ₹ <%= booking.rooms * booking.listing.price*1.18 %> / night
+              ₹ <%= booking.rooms * booking.listing.price*1.18 %> / night (.Incl GST)
             </p>
+          <% const now = new Date(); %>
+          <% if (now < new Date(booking.startDate)) { %>
+            <span class="badge text-bg-primary p-2">Upcoming</span>
+          <% } else if (now > new Date(booking.endDate)) { %>
+            <span class="badge text-bg-warning p-2">Completed</span>
+          <% } else { %>
+            <span class="badge text-bg-success p-2">Ongoing</span>
+          <% } %>
 
           </div>
 
